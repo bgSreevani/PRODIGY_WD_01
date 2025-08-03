@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elegant Navigation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fff);
+      padding-top: 70px;
+      scroll-behavior: smooth;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(to right, #00796b, #004d40);
+      color: white;
+      z-index: 1000;
+      transition: background 0.3s ease;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    nav.scrolled {
+      background: linear-gradient(to right, #00695c, #26a69a);
+    }
+
+    @keyframes fadeInDown {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .menu {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .menu li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .menu li:hover,
+    .menu li.active {
+      background-color: #ffffff;
+      color: #00796b;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background: #004d40;
+        width: 100%;
+        display: none;
+      }
+
+      .menu.show {
+        display: flex;
+      }
+
+      .menu li {
+        justify-content: center;
+        padding: 15px;
+        border-radius: 0;
+      }
+
+      .hamburger {
+        display: block;
+        color: white;
+      }
+    }
+
+    section {
+      height: 100vh;
+      padding: 80px 30px;
+    }
+
+    section:nth-child(even) {
+      background-color: #f1f8e9;
+    }
+
+    section:nth-child(odd) {
+      background-color: #ede7f6;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    #backToTop {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 50%;
+      display: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      transition: 0.3s;
+    }
+
+    #backToTop:hover {
+      background-color: #004d40;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-container">
+      <ul class="menu" id="menu">
+        <li onclick="scrollToSection('home')"><i class="fas fa-leaf"></i> Home</li>
+        <li onclick="scrollToSection('portfolio')"><i class="fas fa-briefcase"></i> Portfolio</li>
+        <li onclick="scrollToSection('skills')"><i class="fas fa-lightbulb"></i> Skills</li>
+        <li onclick="scrollToSection('contact')"><i class="fas fa-comments"></i> Contact</li>
+      </ul>
+      <i class="fas fa-bars hamburger" onclick="toggleMenu()"></i>
+    </div>
+  </nav>
+
+  <section id="home">
+    <h2>🌿 Home</h2>
+    <p>Welcome to your modern and stylish web experience!</p>
+  </section>
+
+  <section id="portfolio">
+    <h2>🎨 Portfolio</h2>
+    <p>Explore our latest design and development work.</p>
+  </section>
+
+  <section id="skills">
+    <h2>💼 Skills</h2>
+    <p>We bring expertise in frontend, backend, and full-stack solutions.</p>
+  </section>
+
+  <section id="contact">
+    <h2>📬 Contact</h2>
+    <p>Let’s collaborate! Reach out to start a conversation.</p>
+  </section>
+
+  <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-angle-up"></i></button>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('menu').classList.toggle('show');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('menu').classList.remove('show');
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      const backToTopBtn = document.getElementById('backToTop');
+      navbar.classList.toggle('scrolled', window.scrollY > 10);
+      backToTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+      highlightCurrentSection();
+    });
+
+    function highlightCurrentSection() {
+      const sections = document.querySelectorAll('section');
+      const menuItems = document.querySelectorAll('.menu li');
+      let index = sections.length;
+      while (--index && window.scrollY + 100 < sections[index].offsetTop) {}
+      menuItems.forEach(li => li.classList.remove('active'));
+      menuItems[index].classList.add('active');
+    }
+
+    highlightCurrentSection();
+  </script>
+
+</body>
+</html>
